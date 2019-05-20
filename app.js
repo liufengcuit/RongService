@@ -17,6 +17,20 @@ const reqHeaderSet = publicParams.encryptionSha1();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// 连接数据库
+const $mysql   = require("mysql");
+const sql = require("./db/connection");
+const $sql = $mysql.createConnection(sql.mysql);
+$sql.connect();
+
+const _sql = 'SELECT * FROM user';
+$sql.query(_sql, function (err,result) {
+    if(err){
+        console.log('[SELECT ERROR]:',err.message);
+    }
+    console.log("56",result);  //数据库查询结果返回到result中
+});
+
 
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
