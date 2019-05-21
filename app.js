@@ -20,15 +20,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 连接数据库
 const $mysql   = require("mysql");
 const sql = require("./db/connection");
+
 const $sql = $mysql.createConnection(sql.mysql);
-$sql.connect();
+$sql.connect(function(res) {
+    // console.log(res)
+    console.log('连接中')
+});
 
 const _sql = 'SELECT * FROM user';
-$sql.query(_sql, function (err,result) {
+$sql.query(_sql, function (err,results) {
     if(err){
         console.log('[SELECT ERROR]:',err.message);
     }
-    console.log("56",result);  //数据库查询结果返回到result中
+    if (results) {
+        for(var i = 0; i < results.length; i++)
+        {
+            console.log('%s\t%s',results[i].user,results[i].password);
+        }
+    }
 });
 
 
@@ -47,7 +56,11 @@ app.get('/login', multipartMiddleware, (req, res)=>{
     })
 })
 
-console.log(reqHeaderSet)
+app.post('/register', multipartMiddleware, (req, res)=>{
+    console.log(req.body)
+    res.send({})
+})
+
 
 function postData(call) {
     let req = http.request({
@@ -69,7 +82,7 @@ function postData(call) {
 
         res.on('end', function(){
             call(_data)
-            console.log(_data);
+            // console.log(_data);
         });
     })
 
