@@ -52,13 +52,43 @@ app.all('*', function(req, res, next) {
 
 app.get('/login', multipartMiddleware, (req, res)=>{
     postData(_res=>{
-        res.send(_res)
+        res.send({
+            code: 200,
+            body: {
+                token: JSON.parse(_res).token
+            },
+            message: 'success'
+        })
     })
 })
 
 app.post('/register', multipartMiddleware, (req, res)=>{
     console.log(req.body)
-    res.send({})
+
+    let  userAddSql = 'INSERT INTO user(user,password) VALUES(?,?)';
+
+    let  userAddSql_Params = [req.body.user, req.body.password];
+
+    $sql.query(userAddSql,userAddSql_Params,function (err, result) {
+
+        if(err){
+
+         console.log('[INSERT ERROR] - ',err.message);
+
+         return;
+
+        }       
+
+       console.log('-------INSERT----------');
+
+       //console.log('INSERT ID:',result.insertId);       
+
+       console.log('INSERT ID:',result);       
+
+       console.log('#######################'); 
+
+});
+    res.send(req.body)
 })
 
 
