@@ -50,17 +50,20 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-app.get('/login', multipartMiddleware, (req, res)=>{
-    postData(_res=>{
-        res.send({
-            code: 200,
-            body: {
-                token: JSON.parse(_res).token
-            },
-            message: 'success'
-        })
-    })
-})
+const routes = require('./routes/index');
+routes(app, multipartMiddleware);
+
+// app.get('/login', multipartMiddleware, (req, res)=>{
+//     postData(_res=>{
+//         res.send({
+//             code: 200,
+//             body: {
+//                 token: JSON.parse(_res).token
+//             },
+//             message: 'success'
+//         })
+//     })
+// })
 
 app.post('/register', multipartMiddleware, (req, res)=>{
     console.log(req.body)
@@ -77,15 +80,7 @@ app.post('/register', multipartMiddleware, (req, res)=>{
 
          return;
 
-        }       
-
-       console.log('-------INSERT----------');
-
-       //console.log('INSERT ID:',result.insertId);       
-
-       console.log('INSERT ID:',result);       
-
-       console.log('#######################'); 
+        }
 
 });
     res.send(req.body)
